@@ -1,6 +1,6 @@
 from airflow import DAG
 from airflow.providers.standard.operators.python import PythonOperator
-from datetime import datetime
+from datetime import datetime, timedelta
 import requests
 import psycopg2
 from dotenv import load_dotenv
@@ -46,8 +46,14 @@ def load_weather(ti):
     cursor.close()
     conn.close()
 
+default_args = {
+    "retries": 3,
+    "retry_delay": timedelta(minutes=5),
+}
+
 with DAG(
     dag_id = "weather_etl",
+    default_args = default_args,
     start_date = datetime(2026, 3, 8),
     schedule = "@daily",
     catchup = False

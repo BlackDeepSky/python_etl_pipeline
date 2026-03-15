@@ -34,6 +34,23 @@
 
 ---
 
+### 📂 [airflow_pipeline/](./airflow_pipeline/) — Оркестрация (Apache Airflow)
+
+ETL пайплайн загрузки погодных данных, оркестрированный через Apache Airflow 3.x.
+
+| Файл | Описание |
+|---|---|
+| `airflow/dags/weather_etl_dag.py` | DAG с тремя задачами: extract → transform → load |
+
+**Архитектура:**
+- `extract_weather` — запрос к Open-Meteo API, возврат сырых данных через XCom
+- `transform_weather` — извлечение нужных полей из ответа API
+- `load_weather` — запись в PostgreSQL
+
+**Стек:** Python 3.12, Apache Airflow 3.x, PostgreSQL 16, psycopg2, python-dotenv, requests
+
+---
+
 ## Установка
 
 ```bash
@@ -51,6 +68,13 @@ cd ../dwh
 python3 -m venv venv
 source venv/bin/activate
 pip install psycopg2-binary python-dotenv
+
+# Airflow pipeline
+cd ../airflow_pipeline
+python3.12 -m venv venv
+source venv/bin/activate
+pip install "apache-airflow==3.x" psycopg2-binary python-dotenv requests
+airflow standalone
 ```
 
 ## Настройка

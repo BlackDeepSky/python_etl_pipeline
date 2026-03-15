@@ -65,4 +65,5 @@ with DAG(
         task_id = "load_weather",
         python_callable = load_weather,
     )
+
 task1 >> task2 >> task3
